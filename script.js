@@ -246,8 +246,7 @@ class sceneC extends Phaser.Scene {
     }
     preload()
     {
-        this.load.path = './assets/';
-        this.load.image('logo', 'logo.png');
+        
     }
     create()
     {
