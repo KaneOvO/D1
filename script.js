@@ -1,6 +1,6 @@
 class sceneA extends Phaser.Scene {
     constructor() {
-        super({Key:"sceneA"});
+        super("sceneA");
     }
     preload()
     {
@@ -67,16 +67,29 @@ class sceneA extends Phaser.Scene {
             ease: 'Linear',
         });
 
-        
+        this.input.once('pointerdown', () =>
+        {
+            //fade out
+            this.cameras.main.fade(1000);
+            
+            //once fadeout complete go to next sceneB //ask by chatgpt
+            this.cameras.main.once('camerafadeoutcomplete', () =>
+            {
+                this.scene.start("sceneB");
+            },this);
+
+        }, this);
 
 
     }
-    update(){}
+    update(){
+        
+    }
 }
 
 class sceneB extends Phaser.Scene {
     constructor() {
-        super({Key:"sceneB"});
+        super("sceneB");
     }
     preload()
     {
@@ -86,6 +99,9 @@ class sceneB extends Phaser.Scene {
     }
     create()
     {
+        //fade in
+        this.cameras.main.fadeIn(1000);
+
         //create image object
         this.background = this.add.image(
             0,//x
@@ -177,6 +193,7 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.textObject1,
             alpha:1,
+            delay: 1000,
             duration: 1500,
             ease: 'Linear',
         });
@@ -184,6 +201,7 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.triangle1,
             alpha:1,
+            delay: 1000,
             duration: 1500,
             ease: 'Linear',
         });
@@ -191,7 +209,7 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.textObject2,
             alpha:1,
-            delay: 1500,
+            delay: 2500,
             duration: 1500,
             ease: 'Linear',
         });
@@ -199,7 +217,7 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.triangle2,
             alpha:1,
-            delay: 1500,
+            delay: 2500,
             duration: 1500,
             ease: 'Linear',
         });        
@@ -207,7 +225,7 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.textObject3,
             alpha:1,
-            delay: 3000,
+            delay: 4000,
             duration: 1500,
             ease: 'Linear',
         });
@@ -215,7 +233,7 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.triangle3,
             alpha:1,
-            delay: 3000,
+            delay: 4000,
             duration: 1500,
             ease: 'Linear',
         });
@@ -223,7 +241,7 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.textObject4,
             alpha:1,
-            delay: 4500,
+            delay: 5500,
             duration: 1500,
             ease: 'Linear',
         });
@@ -231,10 +249,48 @@ class sceneB extends Phaser.Scene {
         this.tweens.add({
             targets: this.triangle4,
             alpha:1,
-            delay: 4500,
+            delay: 5500,
             duration: 1500,
             ease: 'Linear',
         });
+        
+
+        //Sliding scene transition
+        //This method comes from samme https://phaser.discourse.group/t/sliding-scene-transition/9031/2
+        var cam = this.cameras.main;
+        var targetScene = this.scene.get("sceneC"); // sleeping
+        var targetCam = targetScene.cameras.main;
+        var defaultWidth = this.cameras.default.width;
+
+        this.input.once('pointerdown', () =>
+        {
+            this.scene.transition({
+                target: "sceneC",  
+                duration: 500,   
+                sleep: true,      
+                allowInput: false, 
+                onUpdate: function (progress) {
+                    const t = Phaser.Math.Easing.Quadratic.InOut(progress);
+
+                    cam.setViewport(
+                        t * defaultWidth,
+                        0,
+                        (1 - t) * defaultWidth,
+                        cam.height
+                    );
+
+                    targetCam.setViewport(
+                        0,
+                        0,
+                        t * defaultWidth,
+                        targetCam.height
+                    );
+
+                    targetCam.setScroll((1 - t) * defaultWidth, 0);
+
+                },
+              });
+        }, this);
 
     }
     update(){}
@@ -242,7 +298,7 @@ class sceneB extends Phaser.Scene {
 
 class sceneC extends Phaser.Scene {
     constructor() {
-        super({Key:"sceneC"});
+        super("sceneC");
     }
     preload()
     {
@@ -250,8 +306,53 @@ class sceneC extends Phaser.Scene {
     }
     create()
     {
+        this.cameras.main.setBounds(0, 0, this.width, this.height);
+        this.cameras.main.setScroll(-this.width, 0);
+
+        this.textObject1 = this.add.text(
+            350,//x
+            550,//y
+            "Loading...", //text
+            {
+                font: "20px Arial",
+                color: "#434343",
+            } //style
+        );
+
+        this.textObject2 = this.add.text(
+            -500,//x
+            200,//y
+            "There should be a short plot introduction here...\n\nbut I haven't thought about it yet.", //text
+            {
+                font: "20px Arial",
+                color: "#434343",
+            } //style
+        );
 
 
+        this.tweens.add({
+            targets: this.textObject1,
+            alpha:{from: 0, to: 1},
+            duration: 1500,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: this.textObject1,
+            alpha:{from: 1, to: 0},
+            delay: 1500,
+            duration: 1500,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: this.textObject2,
+            x:200,
+            y:200,
+            delay: 3000,
+            duration: 1000,
+            ease: 'Linear',
+        });
 
 
     }
@@ -264,8 +365,8 @@ let config = {
     type: Phaser.WEBGL,
     width: 800,
     height: 600,
-    backgroundColor: 0xffffff,
-    scene: [sceneA],
+    backgroundColor: 0xeeeeee,
+    scene: [ sceneA, sceneB, sceneC ]
 }
 
 let game = new Phaser.Game(config)
