@@ -388,7 +388,7 @@ class sceneB extends Phaser.Scene {
         );
 
         //create audio object
-        //sound effect comes from artisticdude https://opengameart.org/content/battle-sound-effects
+        //sound effect2 comes from artisticdude https://opengameart.org/content/battle-sound-effects
         this.soundEffect = this.sound.add(
             'soundEffect2', 
             { 
@@ -558,7 +558,9 @@ class sceneC extends Phaser.Scene {
             200,//y
             `There should be a short plot introduction here...
             
-but I haven't thought about it yet.`, //text
+but I haven't thought about it yet.
+
+Click to see the credit`, //text
             {
                 font: "20px Arial",
                 color: "#434343",
@@ -590,9 +592,37 @@ but I haven't thought about it yet.`, //text
             ease: 'Linear',
         });
 
+        this.input.once('pointerdown', () =>
+        {
+            this.scene.start("credit");
+
+        }, this);
 
     }
     update(){}
+}
+
+class credit extends Phaser.Scene {
+    constructor() {
+        super("credit");
+    }
+    preload()
+    {
+        this.load.path = './assets/';
+        this.load.image('credit', 'credit.png');
+    }
+    create()
+    {
+        this.imageObject = this.add.image(
+            0,//x
+            0,//y
+            'credit',//imagename
+        );
+        this.imageObject.setOrigin(0, 0);
+    }
+    update(){
+        
+    }
 }
 
 
@@ -603,7 +633,7 @@ let config = {
     height: 600,
     backgroundColor: 0xeeeeee,
     globals: {},
-    scene: [ scene0, sceneA, sceneB, sceneC]
+    scene: [ scene0, sceneA, sceneB, sceneC,credit]
 }
 
 let game = new Phaser.Game(config)
