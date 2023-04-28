@@ -37,7 +37,7 @@ The background is generated using AI Midjourney.(Background of the main menu sce
 Sound Works:
 sound effect comes from Fupi https://opengameart.org/content/8bit-menu-highlight (Located in the transition from the start scene to the main menu scene)
 
-Background music comes from Hitctrl https://opengameart.org/content/villagestartingmusic (Starts scene playback and ends when it enters a multi-line text scene
-)
+Background music comes from Hitctrl https://opengameart.org/content/villagestartingmusic (Starts scene playback and ends when it enters a multi-line text scene)
+
 sound effect2 comes from artisticdude https://opengameart.org/content/battle-sound-effects (Play when the main menu scene transitions to a multi-line text scene)
 
