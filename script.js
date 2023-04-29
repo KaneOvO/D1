@@ -172,14 +172,14 @@ class scene0 extends Phaser.Scene {
             this.tweens.add({
                 targets: this.rectangle1,
                 y:-1000,
-                duration: 1000,
+                duration: 3000,
                 ease: 'Linear',
             });
 
             this.tweens.add({
                 targets: this.rectangle2,
                 y:2000,
-                duration: 1000,
+                duration: 3000,
                 ease: 'Linear',
                 //once animation finished, jump to sceneA
                 onComplete: () =>
@@ -250,6 +250,8 @@ class sceneA extends Phaser.Scene {
         );
         this.imageObject.alpha = 0;
 
+        this.fxShadow = this.imageObject.preFX.addShadow(0, 0, 0.006, 2, 0x333333, 10);
+
         this.soundEffect = this.registry.get('soundEffect');
 
         // Add tweens
@@ -267,6 +269,8 @@ class sceneA extends Phaser.Scene {
             delay: 3000,
             duration: 1500,
             ease: 'Linear',
+            yoyo: true,
+            repeat: -1,
         });
       
 
@@ -276,6 +280,27 @@ class sceneA extends Phaser.Scene {
             duration: 1500,
             ease: 'Linear',
         });
+
+        this.tweens.add({
+            targets: this.imageObject,
+            scale:1.05,
+            duration: 1500,
+            delay:1500,
+            ease: 'Linear',
+            yoyo: true,
+            repeat: -1
+        });
+
+        this.tweens.add({
+            targets: this.fxShadow,
+            x: 5,
+            y: -5,
+            duration: 1500,
+            delay: 1500,
+            yoyo: true,
+            repeat: -1
+        })
+
 
         this.input.once('pointerdown', () =>
         {
@@ -631,6 +656,7 @@ let config = {
     type: Phaser.WEBGL,
     width: 800,
     height: 600,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
     backgroundColor: 0xeeeeee,
     globals: {},
     scene: [ scene0, sceneA, sceneB, sceneC,credit]
